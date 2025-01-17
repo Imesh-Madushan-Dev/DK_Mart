@@ -1,6 +1,6 @@
 name: dk_mart_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -13,6 +13,11 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   carousel_slider: ^5.0.0
   shimmer: ^3.0.0
+  icons_plus: ^5.0.0
+  http: ^1.2.2
+  google_fonts: ^6.2.1
+  flutter_native_splash: ^2.4.4
+  flutter_launcher_icons: ^0.14.2
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +27,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/
     - assets/images/
     - assets/images/social_logo/
     - assets/images/Banners/
@@ -34,3 +40,15 @@ flutter:
     - family: Staatliches
       fonts:
         - asset: assets/fonts/Staatliches-Regular.ttf
+
+# Icon Generator   //Dont  Remove this
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png" # Updated to use SVG logo
+  min_sdk_android: 21 #
+
+# Native Splash Screen  //Dont  Remove this
+flutter_native_splash:
+  color: "#ffffff" # This is already white
+  image: assets/images/logo.png # Updated to use SVG logo

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import '../screens/auth/login_screen.dart';
+import '../screens/auth/register_screen.dart';
 import '../screens/main/bottom_nav.dart';
 import '../screens/onboarding/onboarding.dart';
-import '../screens/auth/authentication.dart';
+
 
 class AppRoutes {
   // Route names as static constants
   static const String splash = '/';
-  static const String authentication = '/auth';
+
    static const String mainPage = '/main';
+   static const String login = '/login';
+   static const String signup = '/signup';
 
 
   // Route generator
   static Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
       splash: (context) => const OnBoarding(),
-      authentication: (context) => const Authentication(),
-      mainPage : (context) => const BottomNavScreen()
+     
+      mainPage : (context) => const BottomNavScreen(),
+      login : (context) => const LoginScreen(),
+      signup : (context) => const RegisterScreen(),
     };
   }
 }

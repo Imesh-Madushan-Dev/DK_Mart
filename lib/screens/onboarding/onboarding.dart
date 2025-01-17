@@ -1,254 +1,171 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import '../../constants/colors.dart';
 import '../../routes/routes.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _OnBoardingState createState() => _OnBoardingState();
+  State<OnBoarding> createState() => _OnBoardingState();
 }
 
 class _OnBoardingState extends State<OnBoarding> {
   final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  final List<Map<String, String>> _onboardingData = [
+    {
+      'title': 'DISCOVER THE BEST',
+      'description':
+          'From gadgets to groceries, everything you need in one place!',
+      'image': 'assets/images/A.png',
+    },
+    {
+      'title': 'UNBEATABLE STYLES ESSENTIAL SUPPLIES',
+      'description': 'All you need, right at your fingertips.',
+      'image': 'assets/images/B.png',
+    },
+    {
+      'title': 'SHOP SMART, SAVE BIG',
+      'description': 'Your journey to smarter shopping starts here.',
+      'image': 'assets/images/C.png',
+    },
+  ];
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: PageView(
-          controller: _pageController,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 10, right: 15, left: 15),
-              child: Stack(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 100,
-                      ),
-                      Image.asset(
-                        'assets/images/A.png',
-                        height: 250,
-                      ),
-                      const SizedBox(
-                        height: 100,
-                      ),
-                      const Text(
-                        'DISCOVER THE BEST',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Staatliches',
-                          fontSize: 40,
-                          color: Color(0xffff773d),
-                        ),
-                      ),
-                      const Text(
-                        'From gadgets to groceries, everything you need in one place!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Staatliches',
-                          fontSize: 20,
-                          color: Color(0xff37474F),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: TextButton(
-                      onPressed: () {
-                        _pageController.jumpToPage(2);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey,
-                      ),
-                      child: const Text(
-                        'Skip',
-                        style: TextStyle(
-                          fontFamily: 'Staatliches',
-                          fontSize: 14,
-                        ),
-                      ),
+                  Text(
+                    '${_currentPage + 1}/3',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: TextButton(
-                      onPressed: () {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey,
-                      ),
-                      child: const Text(
-                        'Next',
-                        style: TextStyle(
-                          fontFamily: 'Staatliches',
-                          fontSize: 14,
-                        ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    },
+                    child: const Text(
+                      'Skip',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 10, right: 15, left: 15),
-              child: Stack(children: [
-                Column(
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    Image.asset(
-                      'assets/images/B.png',
-                      height: 250,
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    const Text(
-                      'UNBEATABLE STYLES ESSENTIAL SUPPLIES',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Staatliches',
-                        fontSize: 40,
-                        height: 1,
-                        color: Color(0xff2C63FF),
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemCount: _onboardingData.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        _onboardingData[index]['image']!,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        fit: BoxFit.contain,
                       ),
-                    ),
-                    const Text(
-                      'All you need, right at your fingertips.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Staatliches',
-                        fontSize: 20,
-                        height: 2.3,
-                        color: Color(0xff37474F),
+                      const SizedBox(height: 40),
+                      Text(
+                        _onboardingData[index]['title']!,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.staatliches(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: index == 0
+                              ? const Color(0xffFF5E43)
+                              : index == 1
+                                  ? const Color(0xff2C63FF)
+                                  : const Color(0xffAF2401),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                  ],
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: -5,
-                  child: TextButton(
-                    onPressed: () {
-                      _pageController.jumpToPage(2);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                    ),
-                    child: const Text(
-                      'Skip',
-                      style: TextStyle(
-                        fontFamily: 'Staatliches',
-                        fontSize: 14,
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: Text(
+                          _onboardingData[index]['description']!,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.staatliches(
+                            fontSize: 18,
+                            color: const Color(0xff37474F),
+                            height: 1.5,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: -5,
-                  child: TextButton(
-                    onPressed: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                    ),
-                    child: const Text(
-                      'Next',
-                      style: TextStyle(
-                        fontFamily: 'Staatliches',
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
+                    ],
+                  );
+                },
+              ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  Image.asset(
-                    'assets/images/C.png',
-                    height: 250,
-                  ),
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  const Text(
-                    'SHOP SMART, SAVE BIG',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Staatliches',
-                      fontSize: 40,
-                      color: Color(0xffAF2401),
-                    ),
-                  ),
-                  const Text(
-                    'Your journey to smarter shopping starts here.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Staatliches',
-                      fontSize: 20,
-                      color: Color(0xff37474F),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const Authentication()),
-                      //   (Route<dynamic> route) => false,
-                      // );
-                      Navigator.pushNamed(context, AppRoutes.authentication);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffff773d),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 80, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Dots indicator
+                  Row(
+                    children: List.generate(
+                      _onboardingData.length,
+                      (index) => Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        height: 8,
+                        width: _currentPage == index ? 24 : 8,
+                        decoration: BoxDecoration(
+                          color: _currentPage == index
+                              ? AppColors.primary
+                              : Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(
-                        fontFamily: 'Staatliches',
-                        fontSize: 28,
-                        color: Colors.white,
+                  ),
+                  // Next/Get Started button
+                  TextButton(
+                    onPressed: () {
+                      if (_currentPage == _onboardingData.length - 1) {
+                        Navigator.pushReplacementNamed(
+                            context, AppRoutes.login);
+                      } else {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Text(
+                      _currentPage == _onboardingData.length - 1
+                          ? 'Get Started'
+                          : 'Next',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
