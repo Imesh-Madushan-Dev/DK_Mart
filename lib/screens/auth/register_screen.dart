@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
-
-import '../../models/RegisterModel.dart';
 import '../../routes/routes.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
@@ -61,43 +59,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => _isLoading = true);
 
       try {
-        final user = User(
+        await _authService.register(
           name: _nameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text,
           phone: _phoneController.text.trim(),
           address: _addressController.text.trim(),
-          dob: _selectedDate!.toIso8601String(),
+          dob: _selectedDate!.toIso8601String().split('T')[0],
         );
-
-        final result = await _authService.register(user);
 
         setState(() => _isLoading = false);
 
         if (!mounted) return;
 
-        if (result['success']) {
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registration successful! Please login.'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          // Navigate to login screen
-          Navigator.pushReplacementNamed(context, AppRoutes.login);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result['message'])),
-          );
-        }
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration successful! Please login.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Navigate to login screen
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
       } catch (e) {
         setState(() => _isLoading = false);
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred. Please try again.'),
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -162,7 +153,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value?.isEmpty ?? true) {
                       return 'Please enter your email';
                     }
-                    // Add email validation
+                    if (!value!.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
                   },
                 ),
@@ -184,6 +177,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value?.isEmpty ?? true) {
                       return 'Please enter your password';
                     }
+                    if (value!.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
                     return null;
                   },
                 ),
@@ -196,6 +192,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return 'Please enter your phone number';
+                    }
+                    if (!value!.startsWith('+')) {
+                      return 'Please include country code (e.g., +94)';
                     }
                     return null;
                   },

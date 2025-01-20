@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       try {
-        final result = await _authService.login(
+        await _authService.login(
           _emailController.text.trim(),
           _passwordController.text,
         );
@@ -36,20 +36,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (!mounted) return;
 
-        if (result['success']) {
-          Navigator.pushReplacementNamed(context, AppRoutes.mainPage);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result['message'])),
-          );
-        }
+        // Successfully logged in
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login successful!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Navigate to main page
+        Navigator.pushReplacementNamed(context, AppRoutes.mainPage);
       } catch (e) {
         setState(() => _isLoading = false);
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred. Please try again.'),
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -109,6 +113,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value?.isEmpty ?? true) {
                       return 'Please enter your email';
                     }
+                    if (!value!.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
                   },
                 ),
@@ -129,6 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return 'Please enter your password';
+                    }
+                    if (value!.length < 6) {
+                      return 'Password must be at least 6 characters';
                     }
                     return null;
                   },

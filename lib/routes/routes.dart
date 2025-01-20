@@ -1,4 +1,4 @@
-import 'package:dk_mart_app/main/main_screen.dart';
+import 'package:dk_mart_app/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-import '../constants/colors.dart';
+import '../../constants/colors.dart';
 import 'cart_screen.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
