@@ -19,17 +19,17 @@ class _OnBoardingState extends State<OnBoarding> {
       'title': 'Choose Products',
       'description':
           'Browse through our extensive collection of quality products.',
-      'image': 'assets/onboarding/A.png',
+      'image': 'assets/onboarding/F.png',
     },
     {
       'title': 'Make Payment',
       'description': 'Safe and secure payment options for your convenience.',
-      'image': 'assets/onboarding/B.png',
+      'image': 'assets/onboarding/G.png',
     },
     {
       'title': 'Get Your Order',
       'description': 'Fast and reliable delivery right to your doorstep.',
-      'image': 'assets/onboarding/C.png',
+      'image': 'assets/onboarding/H.png',
     },
   ];
 
@@ -123,22 +123,43 @@ class _OnBoardingState extends State<OnBoarding> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              _onboardingData[index]['image']!,
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.35,
-                                  color: Colors.grey[200],
-                                  child: const Icon(
-                                    Icons.image_not_supported,
-                                    size: 50,
-                                    color: Colors.grey,
+                            AnimatedOpacity(
+                              opacity: _currentPage == index ? 1 : 0.5,
+                              duration: const Duration(milliseconds: 300),
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.asset(
+                                    _onboardingData[index]['image']!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.45,
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.image_not_supported,
+                                          size: 50,
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 48),
                             Text(
