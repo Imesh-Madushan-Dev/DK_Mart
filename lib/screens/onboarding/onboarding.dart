@@ -65,7 +65,7 @@ class _OnBoardingState extends State<OnBoarding> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red[400],
         body: SafeArea(
           child: Column(
             children: [
@@ -80,7 +80,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black54,
+                        color: Colors.white,
                       ),
                     ),
                     TextButton(
@@ -91,6 +91,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       child: const Text(
                         'Skip',
                         style: TextStyle(
+                          color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -177,7 +178,7 @@ class _OnBoardingState extends State<OnBoarding> {
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                 fontSize: 16,
-                                color: Colors.black54,
+                                color: Colors.grey[100],
                                 height: 1.5,
                               ),
                             ),
@@ -226,6 +227,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         style: GoogleFonts.montserrat(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          //color: Colors.red[900],
                         ),
                       ),
                     ),
