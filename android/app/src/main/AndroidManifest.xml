@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="dk_mart_app"
+        android:label="DK Mart"
+        android:enableOnBackInvokedCallback="true" 
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
