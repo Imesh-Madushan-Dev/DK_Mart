@@ -19,6 +19,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   flutter_launcher_icons: ^0.14.2
   flutter_dotenv: ^5.2.1
+  salomon_bottom_bar: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -30,13 +31,15 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/social_logo/
+    - assets/onboarding/
     - assets/images/Banners/
     - assets/images/Custom_Icons/
     - assets/sampleProducts/
     - assets/sampleProducts/casualComfort/
     - assets/sampleProducts/runningMaster/
     - assets/sampleProducts/sneakerPro/
+
+    - .env
   fonts:
     - family: Staatliches
       fonts:

@@ -14,22 +14,25 @@ class _OnBoardingState extends State<OnBoarding> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<Map<String, String>> _onboardingData = [
+  final List<Map<String, dynamic>> _onboardingData = [
     {
-      'title': 'DISCOVER THE BEST',
+      'title': 'Choose Products',
       'description':
-          'From gadgets to groceries, everything you need in one place!',
-      'image': 'assets/images/A.png',
+          'Browse through our extensive collection of quality products.',
+      'image': 'assets/onboarding/A.png',
+      'color': const Color(0xffFF5E43),
     },
     {
-      'title': 'UNBEATABLE STYLES ESSENTIAL SUPPLIES',
-      'description': 'All you need, right at your fingertips.',
-      'image': 'assets/images/B.png',
+      'title': 'Make Payment',
+      'description': 'Safe and secure payment options for your convenience.',
+      'image': 'assets/onboarding/B.png',
+      'color': const Color(0xff2C63FF),
     },
     {
-      'title': 'SHOP SMART, SAVE BIG',
-      'description': 'Your journey to smarter shopping starts here.',
-      'image': 'assets/images/C.png',
+      'title': 'Get Your Order',
+      'description': 'Fast and reliable delivery right to your doorstep.',
+      'image': 'assets/onboarding/C.png',
+      'color': const Color(0xffAF2401),
     },
   ];
 
@@ -47,7 +50,7 @@ class _OnBoardingState extends State<OnBoarding> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -56,6 +59,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
+                      color: Colors.black54,
                     ),
                   ),
                   TextButton(
@@ -67,6 +71,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -83,48 +88,44 @@ class _OnBoardingState extends State<OnBoarding> {
                 },
                 itemCount: _onboardingData.length,
                 itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        _onboardingData[index]['image']!,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        fit: BoxFit.contain,
-                      ),
-                      const SizedBox(height: 40),
-                      Text(
-                        _onboardingData[index]['title']!,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.staatliches(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: index == 0
-                              ? const Color(0xffFF5E43)
-                              : index == 1
-                                  ? const Color(0xff2C63FF)
-                                  : const Color(0xffAF2401),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          _onboardingData[index]['image']!,
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          fit: BoxFit.contain,
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Text(
+                        const SizedBox(height: 48),
+                        Text(
+                          _onboardingData[index]['title']!,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
                           _onboardingData[index]['description']!,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.staatliches(
-                            fontSize: 18,
-                            color: const Color(0xff37474F),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            color: Colors.black54,
                             height: 1.5,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
+            Container(
+              padding: const EdgeInsets.all(24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -132,7 +133,8 @@ class _OnBoardingState extends State<OnBoarding> {
                   Row(
                     children: List.generate(
                       _onboardingData.length,
-                      (index) => Container(
+                      (index) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
                         margin: const EdgeInsets.only(right: 8),
                         height: 8,
                         width: _currentPage == index ? 24 : 8,
@@ -158,6 +160,12 @@ class _OnBoardingState extends State<OnBoarding> {
                         );
                       }
                     },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                    ),
                     child: Text(
                       _currentPage == _onboardingData.length - 1
                           ? 'Get Started'
