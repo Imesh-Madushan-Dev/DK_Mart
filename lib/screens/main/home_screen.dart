@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import '../models/product.dart';
-import '../models/category.dart';
-import '../services/product_service.dart';
-import '../widgets/product_card.dart';
-import '../widgets/category_item.dart';
-import '../constants/colors.dart';
+import '../../services/product_service.dart';
+import '../../models/category.dart';
+import '../../models/product.dart';
+import '../../widgets/product_card.dart';
+import '../../widgets/category_item.dart';
+import '../../constants/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,134 +75,117 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _error != null
-                ? Center(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _error != null
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _error!,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loadData,
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                )
+              : RefreshIndicator(
+                  onRefresh: _loadData,
+                  child: SingleChildScrollView(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          _error!,
-                          style: const TextStyle(color: Colors.red),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: _loadData,
-                          child: const Text('Retry'),
-                        ),
+                        _buildAppBar(),
+                        _buildCategories(),
+                        _buildBannerSlider(),
+                        _buildDealOfTheDay(),
+                        _buildSpecialOffers(),
+                        _buildTrendingProducts(),
+                        _buildNewArrivals(),
+                        const SizedBox(height: 20),
                       ],
                     ),
-                  )
-                : RefreshIndicator(
-                    onRefresh: _loadData,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildAppBar(),
-                          _buildSearchBar(),
-                          _buildCategories(),
-                          _buildBannerSlider(),
-                          _buildDealOfTheDay(),
-                          _buildSpecialOffers(),
-                          _buildTrendingProducts(),
-                          _buildNewArrivals(),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
                   ),
-      ),
+                ),
     );
   }
 
   Widget _buildAppBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: AppColors.primaryBlue,
       ),
       child: Column(
         children: [
-          // First Row: Logo and Profile
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.red[50],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  color: Colors.red,
-                ),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: _loadData,
-                  ),
-                  const CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.blue,
-                    backgroundImage: AssetImage('assets/images/profile.png'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          // Second Row: Search Bar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[300]!),
-            ),
+          SizedBox(height: 35),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Icon(Icons.search, color: Colors.grey[600], size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search any Product...',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 14,
+                Image.asset(
+                  'assets/images/navbar-logo-new.png',
+                  height: 35,
+                ),
+                const Spacer(),
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/images/avt.png'),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: Colors.grey),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search any Product...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.grey[400]),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      onSubmitted: (value) async {
+                        if (value.isNotEmpty) {
+                          try {
+                            final results =
+                                await _productService.searchProducts(value);
+                            setState(() {
+                              _products = results;
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Error searching products: $e')),
+                            );
+                          }
+                        }
+                      },
                     ),
                   ),
-                ),
-                Icon(Icons.mic, color: Colors.grey[600], size: 20),
-              ],
+                  const Icon(Icons.mic, color: Colors.grey),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildSearchBar() {
-    return const SizedBox.shrink();
   }
 
   Widget _buildCategories() {
