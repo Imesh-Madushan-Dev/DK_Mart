@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/product.dart';
+import '../models/product.dart';
 import '../constants/colors.dart';
 
 class ProductCard extends StatefulWidget {
@@ -42,11 +42,18 @@ class _ProductCardState extends State<ProductCard> {
                 ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.asset(
+                  child: Image.network(
                     widget.product.imageUrl,
                     height: 120,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 120,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.image_not_supported),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
@@ -82,7 +89,7 @@ class _ProductCardState extends State<ProductCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.product.title,
+                    widget.product.productName,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -92,7 +99,7 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.product.description,
+                    widget.product.productDescription,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[600],
@@ -104,7 +111,7 @@ class _ProductCardState extends State<ProductCard> {
                   Row(
                     children: [
                       Text(
-                        '₹${widget.product.price}',
+                        '₹${widget.product.normalPrice}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -112,29 +119,29 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                       ),
                       const Spacer(),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star,
-                            size: 16,
-                            color: Colors.amber,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: widget.product.quantity > 0
+                              ? Colors.green[50]
+                              : Colors.red[50],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          widget.product.quantity > 0
+                              ? 'In Stock: ${widget.product.quantity}'
+                              : 'Out of Stock',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: widget.product.quantity > 0
+                                ? Colors.green[700]
+                                : Colors.red[700],
+                            fontWeight: FontWeight.w500,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            widget.product.rating.toString(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            ' (${widget.product.reviews})',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),

@@ -16,10 +16,11 @@ class AppRoutes {
   // Route generator
   static Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
-      splash: (context) => const OnBoarding(),
-      mainPage: (context) => const MainScreen(),
+      // splash: (context) => const OnBoarding(),
+      splash: (context) => const MainScreen(),
       login: (context) => const LoginScreen(),
       signup: (context) => const RegisterScreen(),
+      mainPage: (context) => const MainScreen(),
     };
   }
 }
